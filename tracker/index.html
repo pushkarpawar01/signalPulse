@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SignalPulse Tracker</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #1e1e2e; color: #cdd6f4; }
+    h1 { color: #89b4fa; }
+    input { width: 100%; padding: 10px; margin-bottom: 10px; background: #313244; color: white; border: 1px solid #45475a; border-radius: 5px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #89b4fa; color: #11111b; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    button:hover { background: #b4befe; }
+    .hidden { display: none; }
+    #status { color: #f38ba8; font-size: 0.9em; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>SignalPulse</h1>
+  
+  <div id="loginForm">
+    <p>Please log in to sync your activity data to your dashboard.</p>
+    <div id="status"></div>
+    <input type="email" id="email" placeholder="Email Address" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="handleLogin()">Sign In</button>
+  </div>
+
+  <div id="trackingState" class="hidden">
+    <p>Welcome, <strong id="userName"></strong>!</p>
+    <p>Status: <strong style="color: #a6e3a1;">Tracking Active Window...</strong></p>
+    <p style="font-size: 0.9em; color: #a6adc8;">Leave this app running in the background to track your productivity and receive focus nudges.</p>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    function handleLogin() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      document.getElementById('status').innerText = "Logging in...";
+      document.getElementById('status').style.color = "#89b4fa";
+      
+      ipcRenderer.send('login', { email, password });
+    }
+
+    ipcRenderer.on('login-reply', (event, response) => {
+      if (response.success) {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('trackingState').classList.remove('hidden');
+        document.getElementById('userName').innerText = response.user;
+      } else {
+        document.getElementById('status').innerText = response.message || "Login failed";
+        document.getElementById('status').style.color = "#f38ba8";
+      }
+    });
+  </script>
+</body>
+</html>
