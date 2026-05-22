@@ -3,15 +3,32 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder --win"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Signal Pulse Tracker Application",
   "dependencies": {
     "active-win": "^8.2.1",
-    "axios": "^1.16.1",
-    "electron": "^42.2.0"
+    "axios": "^1.16.1"
+  },
+  "devDependencies": {
+    "electron": "^42.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.signalpulse.tracker",
+    "productName": "Signal Pulse Tracker",
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

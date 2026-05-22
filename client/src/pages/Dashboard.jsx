@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Activity, Focus, BrainCircuit, Coffee } from "lucide-react";
+import { Activity, Focus, BrainCircuit, Coffee, Download } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = ["#3b82f6", "#8b5cf6", "#ec4899", "#64748b", "#10b981", "#f59e0b"];
@@ -102,6 +102,14 @@ export default function Dashboard() {
           <p className="text-textMuted mt-1">Your digital wellness overview</p>
         </div>
         <div className="flex items-center space-x-4">
+          <a 
+            href="/Signal Pulse Tracker Setup.exe"
+            download
+            className="flex items-center text-sm bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors shadow-lg shadow-primary/25 mr-2"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Download Tracker
+          </a>
           <button 
             onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}
             className="text-sm text-textMuted hover:text-white transition-colors mr-4"

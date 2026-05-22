@@ -2,6 +2,8 @@ const { app, BrowserWindow, Notification, ipcMain } = require("electron");
 const activeWin = require("active-win");
 const axios = require("axios");
 
+const API_URL = process.env.API_URL || "http://localhost:5000/api";
+
 let mainWindow;
 let currentSession = null;
 let activityBatch = [];
@@ -32,7 +34,7 @@ app.on("window-all-closed", () => {
 // IPC listener for login
 ipcMain.on("login", async (event, credentials) => {
   try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", credentials);
+    const res = await axios.post(`${API_URL}/auth/login`, credentials);
     token = res.data.token;
     event.reply("login-reply", { success: true, user: res.data.name });
   } catch (error) {
@@ -63,7 +65,7 @@ const sendDataToServer = async () => {
 
   try {
     console.log("Sending batch of size:", activityBatch.length);
-    await axios.post("http://localhost:5000/api/activity", activityBatch, {
+    await axios.post(`${API_URL}/activity`, activityBatch, {
       headers: { Authorization: `Bearer ${token}` }
     });
     activityBatch = []; // clear after sending
